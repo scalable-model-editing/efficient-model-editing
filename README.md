@@ -1,10 +1,10 @@
-# EMMET is now able to perform batched edits for batch sizes of 10k matching the performance of MEMIT
+# FastMEMIT Family of Methods: Efficient Knowledge Editing with Minimal Pre-computation
 
 ## News 
 
 Our latest study on Model Editing using Llama-3 just released - [Is Bigger Edit Batch Size Always Better? - An Empirical Study on Model Editing with Llama-3](https://arxiv.org/abs/2405.00664)
 
-# A Unified Framework for Model Editing
+# A Unified & Fast Framework for Model Editing
 
 This repository unifies model-editing algorithms under the same conceptual framework of **preservation-memorization** and also under the same code-base. We use a common set of functions to calculate the key and value vectors and explicitly apply the update equations of ROME and MEMIT in the same file. 
 
@@ -13,6 +13,8 @@ We also introduce the EMMET through this repository and add its update equations
 This code also allows for distributing edits across multiple layers using the MEMIT edit-distribution algorithm for ROME, EMMET and MEMIT.
 
 We hope that such a unified code-base simplifies both conceptual and implementational understanding of these model editing algorithms.
+
+Besides, we extend this framework with new features that significantly reduces pre-computation costs and enables fast and scalable editing.
 
 ## Installation
 We work off of the [MEMIT](https://github.com/kmeng01/memit) codebase, so we'll reference the same installation procedures here: 
@@ -68,6 +70,15 @@ python experiments/evaluate_unified_editing.py \
 
 ## How to Cite
 If you find our work useful, please cite it using the following:
+
+```bibtex
+@article{gupta2025efficient,
+  title={Efficient Knowledge Editing via Minimal Precomputation},
+  author={Gupta, Akshat and Maochuan, Lu and Hartvigsen, Thomas and Anumanchipalli, Gopala},
+  journal={arXiv preprint arXiv:2403.14236},
+  year={2025}
+}
+```
 
 ```bibtex
 @article{gupta2024unified,
