@@ -9,7 +9,7 @@
     "v_weight_decay": 0.5,
     "kl_factor": 0.0625,
     "mom2_adjustment": true,
-    "mom2_update_weight": 1000,
+    "mom2_update_weight": 10000,
     "rewrite_module_tmp": "transformer.h.{}.mlp.c_proj",
     "layer_module_tmp": "transformer.h.{}",
     "mlp_module_tmp": "transformer.h.{}.mlp",
@@ -21,5 +21,15 @@
     "mom2_dtype": "float32",
     "calculate_objective_value": false,
     "update_norm_lambda": 0,
-    "emmet_lambda": 0.1
+    "emmet_lambda": 0.1,
+    "dynamic_multiplier": 1,
+    "dynamic": true,
+    "shuffle_text": false,
+    "wikipedia_lang": "en",
+    "skill_preservation": false,
+    "skill_lambda": 1,
+    "skill_sample_size": 10000,
+    "random_vector_preservation": false,
+    "proj_dim": 6400,
+    "identity_cov": false
 }

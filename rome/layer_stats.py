@@ -88,6 +88,7 @@ def layer_stats(
     download=True,
     progress=tqdm,
     force_recompute=False,
+    hparams=None
 ):
     """
     Function to load or compute cached stats.
@@ -110,7 +111,7 @@ def layer_stats(
         return TokenizedDataset(raw_ds["train"], tokenizer, maxlen=maxlen)
 
     # Continue with computation of statistics
-    batch_size = 1  # Examine this many dataset texts at once
+    batch_size = 100  # Examine this many dataset texts at once
     try:
         npos = model.config.n_positions
     except:
@@ -124,20 +125,18 @@ def layer_stats(
     size_suffix = "" if sample_size is None else f"_{sample_size}"
     if batch_tokens < npos:
         size_suffix = "_t{batch_tokens}" + size_suffix
-
-
     if model_name is None:
-        model_name = model.config._name_or_path
-        
-        #extra processing for local models
-        if 'data' in model_name:
-            model_name = model_name.split('/')[-1]
-
-        model_name = model_name.replace("/", "_")
-
+        model_name = model.config._name_or_path.replace("/", "_")
 
     stats_dir = Path(stats_dir)
-    file_extension = f"{model_name}/{ds_name}_stats/{layer_name}_{precision}_{'-'.join(sorted(to_collect))}{size_suffix}.npz"
+    if 'Llama-2' in model_name:
+        file_extension = f"Llama-2-7b-hf/{ds_name}_stats/{layer_name}_{precision}_{'-'.join(sorted(to_collect))}{size_suffix}.npz"
+    elif 'Llama-3' in model_name:
+        file_extension = f"Llama-3-8b-hf/{ds_name}_stats/{layer_name}_{precision}_{'-'.join(sorted(to_collect))}{size_suffix}.npz"
+    elif 'gpt-j' in model_name:
+        file_extension = f"EleutherAI_gpt-j-6B/{ds_name}_stats/{layer_name}_{precision}_{'-'.join(sorted(to_collect))}{size_suffix}.npz"
+    else:
+        file_extension = f"{model_name}/{ds_name}_stats/{layer_name}_{precision}_{'-'.join(sorted(to_collect))}{size_suffix}.npz"
     filename = stats_dir / file_extension
 
     if not filename.exists() and download:
@@ -174,6 +173,7 @@ def layer_stats(
     
     collected_features = []
     total_collected_features = 0
+    total_features = 0
     num_preserve_features = 5e3 if 'llama' not in model.config._name_or_path.lower() else 1e3
     with torch.no_grad():
         for batch_group in progress(loader, total=batch_count):
@@ -189,6 +189,7 @@ def layer_stats(
 
                 if 'llama' in model.config._name_or_path.lower():
                     feats = feats.cpu()
+
 
                 if total_collected_features < num_preserve_features:            
                     collected_features.append(feats)

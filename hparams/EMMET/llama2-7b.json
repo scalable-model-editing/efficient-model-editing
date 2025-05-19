@@ -23,5 +23,15 @@
     "mom2_dtype": "float32",
     "calculate_objective_value": false,
     "update_norm_lambda": 0,
-    "emmet_lambda": 0.1
+    "emmet_lambda": 0.1,
+    "dynamic_multiplier": 1,
+    "dynamic": true,
+    "shuffle_text": false,
+    "wikipedia_lang": "en",
+    "skill_preservation": false,
+    "skill_lambda": 1,
+    "skill_sample_size": 10000,
+    "random_vector_preservation": false,
+    "proj_dim": 11008,
+    "identity_cov": false
 }

@@ -9,7 +9,7 @@ import os
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-sys.path.append('/home/akshatgupta/KnowledgeEditing_local/unified-model-editing')
+sys.path.append('/data/maochuanlu/efficient-model-editing/')
 from baselines.ft import FTHyperParams, apply_ft_to_model
 from baselines.mend import MENDHyperParams, MendRewriteExecutor
 from dsets import (
@@ -520,7 +520,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--sequential",
         type=bool,
-        default=False,
+        default=True,
         help="If we want to do sequential editing or not",
     )
     parser.add_argument(

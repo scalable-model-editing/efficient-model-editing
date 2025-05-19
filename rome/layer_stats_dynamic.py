@@ -106,7 +106,7 @@ def layer_stats_dynamic(
 
         raw_ds = load_dataset(
             ds_name,
-            dict(wikitext="wikitext-103-raw-v1", wikipedia="20200501.en")[ds_name],
+            dict(wikitext="wikitext-103-raw-v1", wikipedia="20200501." + hparams.wikipedia_lang)[ds_name],
         )
         try:
             maxlen = model.config.n_positions
@@ -115,10 +115,11 @@ def layer_stats_dynamic(
 
         if batch_tokens is not None and batch_tokens < maxlen:
             maxlen = batch_tokens
-        return TokenizedDataset(raw_ds["train"], tokenizer, maxlen=maxlen)
+
+        return TokenizedDataset(raw_ds["train"], hparams, tokenizer, maxlen=maxlen,)
 
     # Continue with computation of statistics
-    batch_size = 100  # Examine this many dataset texts at once
+    batch_size = 1  # Examine this many dataset texts at once
     try:
         npos = model.config.n_positions
     except:
@@ -155,63 +156,55 @@ def layer_stats_dynamic(
     dynamic_multiplier = hparams.dynamic_multiplier
     start_time_dynamic = time.time()
     break_outer_loop = False
-
-
     key_vectors = []
-    value_vectors = []
-    with torch.no_grad():
-        for batch_group in progress(loader, total=batch_count):
 
-            for batch in batch_group:
-                batch = dict_to_(batch, "cuda")
-                with Trace(
-                    model, layer_name, retain_input=True, retain_output=True, stop=True
-                ) as tr:
-                    model(**batch)
-                feats = flatten_masked_batch(tr.input, batch["attention_mask"])
 
-                if hparams.bias_update:#add a bunch of 1's for bias update
-                    bias_correction = torch.ones((feats.shape[0], 1), dtype=feats.dtype, device=feats.device)
-                    feats = torch.cat((feats, bias_correction), dim=1)
-                    value_feats = flatten_masked_batch(tr.output, batch["attention_mask"])
-                else:
-                    layer_weights = nethook.get_parameter(model, layer_name + ".weight")
-                    value_feats = feats @ layer_weights 
+    if hparams.random_vector_preservation:
+        stat.add(torch.rand((int(hparams.proj_dim * dynamic_multiplier),  hparams.proj_dim)))
 
-                
-                #adding dynamic ROME constraint code
-                if hparams.dynamic:
-                    hidden_dim = feats.shape[1]
-                    new_keys = feats.shape[0]
+    else:
 
-                    #check if keys going over
-                    if (total_keys_stored + new_keys) > (hidden_dim * dynamic_multiplier):
-                        feats = feats[:(hidden_dim * dynamic_multiplier) - total_keys_stored, :]
-                        value_feats = value_feats[:(hidden_dim * dynamic_multiplier) - total_keys_stored, :]
+        with torch.no_grad():
+            for batch_group in progress(loader, total=batch_count):
+
+                for batch in batch_group:
+                    batch = dict_to_(batch, "cuda")
+                    with Trace(
+                        model, layer_name, retain_input=True, retain_output=True, stop=True
+                    ) as tr:
+                        model(**batch)
+                    feats = flatten_masked_batch(tr.input, batch["attention_mask"])
+                    
+                    #adding dynamic ROME constraint code
+                    if dynamic_multiplier > 0:
+                        hidden_dim = feats.shape[1]
                         new_keys = feats.shape[0]
 
-                    stat.add(feats)
-                    total_keys_stored += new_keys
-                    key_vectors.append(feats)
-                    value_vectors.append(value_feats)
+                        #check if keys going over
+                        if (total_keys_stored + new_keys) > (hidden_dim * dynamic_multiplier):
+                            feats = feats[:(hidden_dim * dynamic_multiplier) - total_keys_stored, :]
+                            new_keys = feats.shape[0]
 
-                    print('TOTAL KEYS STORED:', total_keys_stored, 'TIME TAKEN:', time.time()-start_time_dynamic)
+                        stat.add(feats)
+                        total_keys_stored += new_keys
+                        #key_vectors.append(feats)
 
-                    #finish storing keys when done
-                    if total_keys_stored >= (hidden_dim * dynamic_multiplier):
-                        break_outer_loop = True
-                        break
-                ##### END dynamic ROME block
-                else:
-                    stat.add(feats)
+                        print('TOTAL KEYS STORED:', total_keys_stored, 'TIME TAKEN:', time.time()-start_time_dynamic)
 
-            if break_outer_loop:
-                break          
-    
-    key_vectors = torch.cat(key_vectors, dim = 0)
-    value_vectors = torch.cat(value_vectors, dim = 0)
+                        #finish storing keys when done
+                        if total_keys_stored >= (hidden_dim * dynamic_multiplier):
+                            break_outer_loop = True
+                            break
+                    ##### END dynamic ROME block
+                    else:
+                        stat.add(feats)
 
-    return (stat, key_vectors, value_vectors)
+                if break_outer_loop:
+                    break          
+        
+        #key_vectors = torch.cat(key_vectors, dim = 0)
+
+    return stat, key_vectors
 
 
 if __name__ == "__main__":

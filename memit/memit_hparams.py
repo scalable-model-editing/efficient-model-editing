@@ -38,3 +38,15 @@ class MEMITHyperParams(HyperParams):
     calculate_objective_value: bool
     update_norm_lambda: float
     emmet_lambda: float
+
+    # Additonal parameters for fastEMMET
+    dynamic_multiplier: float
+    dynamic: bool
+    shuffle_text: bool
+    wikipedia_lang: str
+    skill_preservation: bool
+    skill_lambda: float
+    skill_sample_size: int
+    random_vector_preservation: bool
+    proj_dim: int
+    identity_cov: bool

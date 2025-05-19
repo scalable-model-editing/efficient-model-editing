@@ -1,6 +1,7 @@
 import torch
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import Dataset
+import random
 
 
 class TokenizedDataset(Dataset):
@@ -10,11 +11,12 @@ class TokenizedDataset(Dataset):
     ids and attention masks, they can be supplied direcly to the model.
     """
 
-    def __init__(self, text_dataset, tokenizer=None, maxlen=None, field="text"):
+    def __init__(self, text_dataset, hparams, tokenizer=None, maxlen=None, field="text"):
         self.text_dataset = text_dataset
         self.field = field
         self.tokenizer = tokenizer
         self.maxlen = maxlen
+        self.hparams = hparams
         if hasattr(text_dataset, "info"):
             self.info = text_dataset.info
 
@@ -28,6 +30,10 @@ class TokenizedDataset(Dataset):
         token_list = self.tokenizer.encode(
             text, truncation=True, max_length=self.maxlen
         )
+        
+        if self.hparams.shuffle_text:
+            random.shuffle(token_list)
+
         position_ids = list(range(len(token_list)))
         attention_mask = [1] * len(token_list)
         return dict(

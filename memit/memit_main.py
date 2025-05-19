@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
-
+from rome.layer_stats_dynamic import layer_stats_dynamic
 from rome.layer_stats import layer_stats
 from util import nethook
 from util.generate import generate_fast
@@ -206,6 +206,7 @@ def execute_memit(
             hparams.mom2_n_samples,
             hparams.mom2_dtype,
             force_recompute=hparams.calculate_objective_value,
+            hparams=hparams,
         )
 
         # Compute update in double precision
@@ -330,6 +331,7 @@ def get_cov(
     mom2_dtype: str,
     inv: bool = False,
     force_recompute: bool = False,
+    hparams=None
 ) -> torch.Tensor:
     """
     Retrieves covariance statistics, then computes the algebraic inverse.
@@ -341,24 +343,58 @@ def get_cov(
     feature_key = (model_name, layer_name, 'preserved_keys')
 
     print(f"Retrieving covariance statistics for {model_name} @ {layer_name}.")
-    if key not in COV_CACHE:
-        stat, preserved_keys = layer_stats(
-            model,
-            tok,
-            layer_name,
-            STATS_DIR,
-            mom2_dataset,
-            to_collect=["mom2"],
-            sample_size=mom2_n_samples,
-            precision=mom2_dtype,
-            force_recompute=force_recompute,
-        )
+    if key not in COV_CACHE or hparams.dynamic:
+        if hparams.identity_cov:
+            COV_CACHE[key] = hparams.mom2_update_weight * torch.eye(hparams.proj_dim)
+            COV_CACHE[feature_key] = []
 
-        COV_CACHE[key] = stat.mom2.moment().float().to("cpu")
+            return COV_CACHE[key].to("cuda"), COV_CACHE[feature_key]
+            
+        if hparams.dynamic_multiplier > 0:
+            stat, preserved_keys = layer_stats_dynamic(
+                model,
+                tok,
+                layer_name,
+                STATS_DIR,
+                mom2_dataset,
+                to_collect=["mom2"],
+                sample_size=mom2_n_samples,
+                precision=mom2_dtype,
+                force_recompute=force_recompute,
+                hparams=hparams
+            )
+        else:
+            stat, preserved_keys = layer_stats(
+                model,
+                tok,
+                layer_name,
+                STATS_DIR,
+                mom2_dataset,
+                to_collect=["mom2"],
+                sample_size=mom2_n_samples,
+                precision=mom2_dtype,
+                force_recompute=force_recompute,
+                hparams=hparams
+            )
+        if hparams.skill_preservation:
+            skill_stat = skill_preservation(
+                model,
+                tok,
+                layer_name,
+                STATS_DIR,
+                to_collect=["mom2"],
+                hparams=hparams,
+                sample_size=hparams.skill_sample_size
+            )
+
+        COV_CACHE[key] = hparams.mom2_update_weight * stat.mom2.moment().float().to("cpu")
+
+        if hparams.skill_preservation:
+            COV_CACHE[key] += hparams.skill_lambda * skill_stat.float().to("cpu")
+
         COV_CACHE[feature_key] = preserved_keys
 
     return COV_CACHE[key].to("cuda"), COV_CACHE[feature_key]
-
 
 
 def upd_matrix_match_shape(matrix: torch.Tensor, shape: torch.Size) -> torch.Tensor:
