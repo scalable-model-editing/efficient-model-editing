@@ -71,14 +71,6 @@ python experiments/evaluate_unified_editing.py \
 ## How to Cite
 If you find our work useful, please cite it using the following:
 
-```bibtex
-@article{gupta2025efficient,
-  title={Efficient Knowledge Editing via Minimal Precomputation},
-  author={Gupta, Akshat and Maochuan, Lu and Hartvigsen, Thomas and Anumanchipalli, Gopala},
-  journal={arXiv preprint arXiv:2403.14236},
-  year={2025}
-}
-```
 
 ```bibtex
 @article{gupta2024unified,
