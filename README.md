@@ -1,20 +1,8 @@
 # FastMEMIT Family of Methods: Efficient Knowledge Editing with Minimal Pre-computation
 
-## News 
+# A Unified & Efficient Framework for Model Editing
 
-Our latest study on Model Editing using Llama-3 just released - [Is Bigger Edit Batch Size Always Better? - An Empirical Study on Model Editing with Llama-3](https://arxiv.org/abs/2405.00664)
-
-# A Unified & Fast Framework for Model Editing
-
-This repository unifies model-editing algorithms under the same conceptual framework of **preservation-memorization** and also under the same code-base. We use a common set of functions to calculate the key and value vectors and explicitly apply the update equations of ROME and MEMIT in the same file. 
-
-We also introduce the EMMET through this repository and add its update equations in this unified codebase.
-
-This code also allows for distributing edits across multiple layers using the MEMIT edit-distribution algorithm for ROME, EMMET and MEMIT.
-
-We hope that such a unified code-base simplifies both conceptual and implementational understanding of these model editing algorithms.
-
-Besides, we extend this framework with new features that significantly reduces pre-computation costs and enables fast and scalable editing.
+Based on Unified Model Editing Framework, our FastMEMIT family of methods add a "dynamic multiplier" hyperparameter to control and reduce the number of preserved key vectors used in the pre-computation. This approach allows for significantly fewer hidden vectors to be pre-computed while maintaining comparable or even better knowledge editing performance. 
 
 ## Installation
 We work off of the [MEMIT](https://github.com/kmeng01/memit) codebase, so we'll reference the same installation procedures here: 
