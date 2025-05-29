@@ -9,13 +9,19 @@ Our FastMEMIT methods can not only finish the pre-computation step with less tha
 ## Performance Visualization
 Here is the plot comparison between FastEMMET and EMMET, and FastMEMIT and MEMIT in Llama 2:
 
-<img width="588" alt="Image" src="https://github.com/user-attachments/assets/d6c4a150-5204-4d80-a0da-1eb37d156925" />
+<div align="center">
+  <img width="588" alt="Performance of FastEMMET and FastMEMIT in Llama 2 across different batch sizes, showing Overall, Efficacy, Paraphrase, and Neighborhood Scores." src="https://github.com/user-attachments/assets/d6c4a150-5204-4d80-a0da-1eb37d156925" />
+</div>
 
 Here are precise stats of dynamic multipliers=10 in tables indicating the comparison between FastEMMET and EMMET, and FastMEMIT and MEMIT in Llama 2:
 
-<img width="588" alt="Image" src="https://github.com/user-attachments/assets/5ff52e86-dd67-403f-95c5-dd348cf93e95" />
+<div align="center">
+  <img width="588" alt="Detailed comparison table for EMMET and FastEMMET metrics in Llama 2 at dynamic multiplier=1, showing Efficacy, Generalization, Locality, and Overall Score." src="https://github.com/user-attachments/assets/5ff52e86-dd67-403f-95c5-dd348cf93e95" />
+</div>
 
-<img width="588" alt="Image" src="https://github.com/user-attachments/assets/2da9b023-29dd-42c3-8735-e2aa3bab50e7" />
+<div align="center">
+  <img width="588" alt="Detailed comparison table for MEMIT and FastMEMIT metrics in Llama 2 at dynamic multiplier=1, showing Efficacy, Generalization, Locality, and Overall Score." src="https://github.com/user-attachments/assets/2da9b023-29dd-42c3-8735-e2aa3bab50e7" />
+</div>
 
 ## Installation
 We work off of the [MEMIT](https://github.com/kmeng01/memit) codebase, so we'll reference the same installation procedures here: 
