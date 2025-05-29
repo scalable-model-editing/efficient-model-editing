@@ -9,9 +9,9 @@ Our FastMEMIT methods can not only finish the pre-computation step with less tha
 ## Performance Visualization
 <img width="588" alt="Image" src="https://github.com/user-attachments/assets/d6c4a150-5204-4d80-a0da-1eb37d156925" />
 
-<img width="572" alt="Image" src="https://github.com/user-attachments/assets/5ff52e86-dd67-403f-95c5-dd348cf93e95" />
+<img width="588" alt="Image" src="https://github.com/user-attachments/assets/5ff52e86-dd67-403f-95c5-dd348cf93e95" />
 
-<img width="567" alt="Image" src="https://github.com/user-attachments/assets/2da9b023-29dd-42c3-8735-e2aa3bab50e7" />
+<img width="588" alt="Image" src="https://github.com/user-attachments/assets/2da9b023-29dd-42c3-8735-e2aa3bab50e7" />
 
 ## Installation
 We work off of the [MEMIT](https://github.com/kmeng01/memit) codebase, so we'll reference the same installation procedures here: 
