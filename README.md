@@ -1,4 +1,4 @@
-# FastMEMIT Family of Methods: Efficient Knowledge Editing with Minimal Pre-computation
+# Efficient Knowledge Editing with Minimal Pre-computation
 
 # A Unified & Efficient Framework for Model Editing
 
@@ -56,31 +56,6 @@ python experiments/evaluate_unified_editing.py \
 The above script can also be used to run ROME and MEMIT from the same file. We have a common underlying code-base for calculating the key and value vectors.
 
 **Before any experiment is run**, there might be need to update ```sys.path.append('/path/to/unified-model-editing')``` in the files 'experiments/evaluate_unified_editing.py' and 'experiments/py/eval_utils_zsre.py' 
-
-## Downstream Evaluation
-
-**downstream_tasks** specifies the downstream tasks to run. Available tasks: nli,rte,mrpc,sentiment_analysis,dialogue,nli,cola,sst
-
-**number_of_few_shots** is the number of few shots for each downstream task. Specify the number of few shots for each task, separated by commas. number_of_few_shots must be same length as downstream_tasks. Its default value is 0 when the flag is not provided
-
-**number_of_tests** is the number of tests for all downstream tasks. The default to using the entire test dataset if the flag is not provided
-
-Example:
-To run nli, sst and mmlu with 2,3,3 few shots respectively, run the following command:
-
-```python
-python experiments/evaluate_unified_editing.py \
---alg_name=EMMET \
---num_edits=4 \
---model_name=gpt2-xl \
---hparams_fname=gpt2-xl.json \
---ds_name=cf \
---do_downstream_eval=True \
---downstream_eval_steps=20 \
---downstream_tasks=nli,sst,mmlu \
---number_of_few_shots=2,3,3 \
---number_of_tests=20
-```
 
 ## How to Cite
 If you find our work useful, please cite it using the following:
