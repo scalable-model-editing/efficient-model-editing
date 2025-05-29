@@ -7,9 +7,11 @@ Based on Unified Model Editing Framework, our FastMEMIT family of methods add a 
 Our FastMEMIT methods can not only finish the pre-computation step with less than 0.1% of the original stipulated number of hidden vectors, which reduces the time from tens of hours to a few minutes, but also achieve similar or improved efficacy, paraphrase, and neighborhood scores compared to the original algorithms. 
 
 ## Performance Visualization
-Here is the plot comparison between FastEMMET and EMMET, and FastMEMIT and MEMIT in llama2
+Here is the plot comparison between FastEMMET and EMMET, and FastMEMIT and MEMIT in Llama 2:
 
 <img width="588" alt="Image" src="https://github.com/user-attachments/assets/d6c4a150-5204-4d80-a0da-1eb37d156925" />
+
+Here are precise stats of dynamic multipliers=10 in tables indicating the comparison between FastEMMET and EMMET, and FastMEMIT and MEMIT in Llama 2:
 
 <img width="588" alt="Image" src="https://github.com/user-attachments/assets/5ff52e86-dd67-403f-95c5-dd348cf93e95" />
 
