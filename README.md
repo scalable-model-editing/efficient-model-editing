@@ -2,7 +2,9 @@
 
 # A Unified & Efficient Framework for Model Editing
 
-Based on Unified Model Editing Framework, our FastMEMIT family of methods add a "dynamic multiplier" hyperparameter to control and reduce the number of preserved key vectors used in the pre-computation. This approach allows for significantly fewer hidden vectors to be pre-computed while maintaining comparable or even better knowledge editing performance. 
+Based on Unified Model Editing Framework, our FastMEMIT family of methods add a "dynamic multiplier" hyperparameter to control and reduce the number of preserved key vectors used in the pre-computation. 
+
+Our FastMEMIT methods can not only finish the pre-computation step with less than 0.1% of the original stipulated number of hidden vectors, which reduces the time from tens of hours to a few minutes, but also achieve similar or improved efficacy, paraphrase, and neighborhood scores compared to the original algorithms. 
 
 ## Installation
 We work off of the [MEMIT](https://github.com/kmeng01/memit) codebase, so we'll reference the same installation procedures here: 
