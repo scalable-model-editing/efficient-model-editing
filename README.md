@@ -19,8 +19,11 @@ CONDA_HOME=$CONDA_HOME ./scripts/setup_conda.sh
 ## Running the experiments
 
 To evaluate EMMET with FastMEMIT family of Methods, 
+
 you need to set "dynamic=true" first, and change "dynamic_multiplier" to reduce preserved key vectors.
+
 (Note: "dynamic_multiplier=10" means using 10 times the theoretical minimum number of preserved key vectors for pre-computation.)
+
 Then run the following command:
 
 ```python
