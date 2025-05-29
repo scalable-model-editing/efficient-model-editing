@@ -20,7 +20,7 @@ CONDA_HOME=$CONDA_HOME ./scripts/setup_conda.sh
 
 To evaluate EMMET with FastMEMIT family of Methods, 
 
-you need to set "dynamic=true" first, and change "dynamic_multiplier" to reduce preserved key vectors.
+you need to set "dynamic=true" first, and change "dynamic_multiplier" to reduce preserved key vectors in hparams files.
 
 (Note: "dynamic_multiplier=10" means using 10 times the theoretical minimum number of preserved key vectors for pre-computation.)
 
@@ -32,7 +32,8 @@ python experiments/evaluate_unified_editing.py \
 --num_edits=4 \
 --model_name=gpt2-xl \
 --hparams_fname=gpt2-xl.json \
---ds_name=cf
+--ds_name=cf \
+--sequential=True
 ```
 
 The above script can also be used to run ROME and MEMIT from the same file. We have a common underlying code-base for calculating the key and value vectors.
