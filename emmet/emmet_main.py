@@ -218,8 +218,8 @@ def execute_emmet(
         )
 
         #add optimization hyper-parameters
-        if hparams.mom2_update_weight != 1:
-            cov *= hparams.mom2_update_weight
+        # if hparams.mom2_update_weight != 1:
+        #     cov *= hparams.mom2_update_weight
 
         if hparams.update_norm_lambda != 0:
             cov += hparams.update_norm_lambda * torch.eye(cov.shape[0], dtype=cov.dtype, device = cov.device)
