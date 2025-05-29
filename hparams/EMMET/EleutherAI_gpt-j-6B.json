@@ -24,7 +24,7 @@
     "calculate_objective_value": false,
     "update_norm_lambda": 0,
     "emmet_lambda": 0.1,
-    "dynamic_multiplier": 1,
+    "dynamic_multiplier": 10,
     "dynamic": true,
     "shuffle_text": false,
     "wikipedia_lang": "en",
